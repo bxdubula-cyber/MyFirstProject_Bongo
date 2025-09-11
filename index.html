@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Data Visualization Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Financial Data Visualization Tool</h1>
+            <p>Upload your 12-month financial data to get instant visual insights.</p>
+        </header>
+        <main>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for message in messages %}
+                    <p class="error">{{ message }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            <div class="upload-section">
+                <form method="post" enctype="multipart/form-data">
+                    <label for="file">Upload your Excel file (.xlsx)</label>
+                    <input type="file" name="file" id="file" accept=".xlsx" required>
+                    <button type="submit">Generate Report</button>
+                </form>
+            </div>
+            <div class="template-section">
+                <h2>Required File Format</h2>
+                <p>Your Excel file must contain these three columns: <strong>date</strong>, <strong>income</strong>, and <strong>expenses</strong>.</p>
+                <p>The 'date' column should contain valid dates for each transaction.</p>
+                <a href="{{ url_for('static', filename='sample_template.xlsx') }}" download="sample_template.xlsx" class="button-download">Download Sample Template</a>
+            </div>
+        </main>
+        <footer>
+            <p>MVP developed by an AI Assistant</p>
+        </footer>
+    </div>
+</body>
+</html>

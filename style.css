@@ -1,0 +1,150 @@
+/* General Body & Typography */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+header, footer {
+    text-align: center;
+    margin-bottom: 30px;
+}
+h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+}
+h2 {
+    color: #34495e;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+/* Card Styling */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+/* Upload Section */
+.upload-section, .template-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+}
+input[type="file"] {
+    display: block;
+    margin: 20px auto;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    border-radius: 6px;
+    width: 80%;
+}
+button, .button-download {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+button:hover, .button-download:hover {
+    background-color: #2980b9;
+}
+/* Flash Messages (Errors) */
+.flash-messages {
+    background-color: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+/* Statistics Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.stat-item {
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+.stat-item h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+.stat-item p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+.stat-item span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: #777;
+}
+.stat-item.income {
+    background-color: rgba(75, 192, 192, 0.1);
+    border-left: 5px solid rgba(75, 192, 192, 1);
+}
+.stat-item.expense {
+    background-color: rgba(255, 99, 132, 0.1);
+    border-left: 5px solid rgba(255, 99, 132, 1);
+}
+/* Detailed Breakdown */
+#month-select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+#monthly-details-display {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+#monthly-details-display h3 {
+    margin-top: 0;
+}
+/* Chart Container */
+#financialChart {
+    height: 400px;
+    width: 100%;
+}
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

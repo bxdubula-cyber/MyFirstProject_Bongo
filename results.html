@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Financial Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Financial Report</h1>
+            <p>Here's a visual summary of your income and expenses.</p>
+        </header>
+        <main>
+            <!-- Chart Section -->
+            <section class="card">
+                <h2>Monthly Income vs. Expenses</h2>
+                <canvas id="financialChart"></canvas>
+            </section>
+            <!-- Summary Statistics Section -->
+            <section class="card">
+                <h2>Summary Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item income">
+                        <h3>Highest Income</h3>
+                        <p>{{ summary_stats.highest_income.value }} <span>(in {{ summary_stats.highest_income.month }})</span></p>
+                    </div>
+                    <div class="stat-item income">
+                        <h3>Lowest Income</h3>
+                        <p>{{ summary_stats.lowest_income.value }} <span>(in {{ summary_stats.lowest_income.month }})</span></p>
+                    </div>
+                    <div class="stat-item income">
+                        <h3>Average Monthly Income</h3>
+                        <p>{{ summary_stats.avg_income }}</p>
+                    </div>
+                    <div class="stat-item expense">
+                        <h3>Highest Expense</h3>
+                        <p>{{ summary_stats.highest_expense.value }} <span>(in {{ summary_stats.highest_expense.month }})</span></p>
+                    </div>
+                    <div class="stat-item expense">
+                        <h3>Lowest Expense</h3>
+                        <p>{{ summary_stats.lowest_expense.value }} <span>(in {{ summary_stats.lowest_expense.month }})</span></p>
+                    </div>
+                    <div class="stat-item expense">
+                        <h3>Average Monthly Expense</h3>
+                        <p>{{ summary_stats.avg_expense }}</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Detailed Breakdown Section -->
+            <section class="card">
+                <h2>Detailed Monthly Breakdown</h2>
+                <label for="month-select">Select a month to view details:</label>
+                <select id="month-select">
+                    <option value="">--Select a Month--</option>
+                    {% for month in chart_data.labels %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+                <div id="monthly-details-display">
+                    <p>Please select a month from the dropdown above.</p>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <a href="{{ url_for('upload_file') }}" class="button-download">Upload Another File</a>
+        </footer>
+    </div>
+    <script>
+        // Data from Flask
+        const chartData = {{ chart_data | tojson }};
+        const monthlyDetails = {{ monthly_details | tojson }};
+        // --- Chart.js Implementation ---
+        const ctx = document.getElementById('financialChart').getContext('2d');
+        const financialChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: 'Income',
+                    data: chartData.income_data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }, {
+                    label: 'Expenses',
+                    data: chartData.expenses_data,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        // --- Month Selection Logic ---
+        const monthSelect = document.getElementById('month-select');
+        const detailsDisplay = document.getElementById('monthly-details-display');
+        monthSelect.addEventListener('change', (event) => {
+            const selectedMonth = event.target.value;
+            if (selectedMonth && monthlyDetails[selectedMonth]) {
+                const details = monthlyDetails[selectedMonth];
+                const income = details.income.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                const expenses = details.expenses.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                detailsDisplay.innerHTML = `
+                    <h3>${selectedMonth}</h3>
+                    <p><strong>Total Income:</strong> ${income}</p>
+                    <p><strong>Total Expenses:</strong> ${expenses}</p>
+                `;
+            } else {
+                detailsDisplay.innerHTML = '<p>Please select a month from the dropdown above.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
